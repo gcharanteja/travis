@@ -70,3 +70,10 @@ async def get_health():
         "status": "healthy" if db_healthy else "unhealthy",
         "database": "connected" if db_healthy else "disconnected"
     }
+
+# Entry point for Render
+if __name__ == "__main__":
+    import uvicorn
+
+    port = int(os.environ.get("PORT", 8000))  # Use Render's PORT env var or default
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
