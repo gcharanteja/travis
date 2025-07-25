@@ -74,6 +74,7 @@ async def get_health():
 # Entry point for Render
 if __name__ == "__main__":
     import uvicorn
-
-    port = int(os.environ.get("PORT", 8000))  # Use Render's PORT env var or default
-    uvicorn.run("app.main:app", host="0.0.0.0", port=port)
+    port = int(os.environ.get("PORT", 8000))
+    reload = os.environ.get("ENV", "production") != "production"
+    logger.info(f"Starting Uvicorn on port {port}, reload={reload}")
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=reload)

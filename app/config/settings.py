@@ -2,8 +2,12 @@ import os
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 from dotenv import load_dotenv
+import logging
 
-# Load environment variables from .env file
+# Set up logging
+logger = logging.getLogger(__name__)
+
+# Load environment variables from .env file (for local testing, ignored by Render)
 load_dotenv()
 
 class Settings(BaseSettings):
@@ -11,7 +15,6 @@ class Settings(BaseSettings):
     APP_NAME: str = "FinTech AI Platform"
     API_V1_STR: str = "/api/v1"
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
-    
     APP_FRONTEND_URL: str = os.getenv("APP_FRONTEND_URL", "http://localhost:3000")
     
     # Security
@@ -20,11 +23,10 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     
     # MongoDB Atlas settings
-    MONGODB_URI: str = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-    MONGODB_DB_NAME: str = os.getenv("MONGODB_DB_NAME", "fintech_ai_platform")
+    MONGODB_URI: str  # Remove default to make it required
+    MONGODB_DB_NAME: str = "fintech_ai_platform"
     
     # External APIs
-    # Plaid API for bank integration
     PLAID_CLIENT_ID: str = os.getenv("PLAID_CLIENT_ID", "")
     PLAID_SECRET: str = os.getenv("PLAID_SECRET", "")
     PLAID_ENV: str = os.getenv("PLAID_ENV", "sandbox")  # sandbox, development, or production
@@ -47,13 +49,17 @@ class Settings(BaseSettings):
     MAX_EDUCATIONAL_CONTENT_ITEMS: int = int(os.getenv("MAX_EDUCATIONAL_CONTENT_ITEMS", "10"))
     
     class Config:
-        case_sensitive = True
-        env_file = ".env"
+        case_sensitive = False  # Allow MONGODB_URI or mongodb_uri
+        env_file = ".env"  # Keep for local testing, ignored by Render
+        env_file_encoding = "utf-8"
 
-@lru_cache()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        logger.info(f"Loaded MONGODB_URI: {self.MONGODB_URI}")
+        logger.info(f"Loaded MONGODB_DB_NAME: {self.MONGODB_DB_NAME}")
+
+@lru_cache
 def get_settings():
-    """a
-    Create and cache an instance of the settings.
-    This allows efficient reuse of settings throughout the application.
-    """
-    return Settings()
+    settings = Settings()
+    logger.info("Settings loaded successfully")
+    return settings
