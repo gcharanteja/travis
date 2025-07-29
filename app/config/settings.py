@@ -4,6 +4,7 @@ from pydantic import Field
 from functools import lru_cache
 from dotenv import load_dotenv
 import logging
+from typing import Optional
 
 # Set up logging
 logger = logging.getLogger(__name__)
