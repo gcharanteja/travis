@@ -4,6 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Path, Query, Back
 from openai import OpenAI
 from bson import ObjectId
 import logging
+import os
+from dotenv import load_dotenv
 
 from app.config.database import get_collection
 from app.config.settings import get_settings
@@ -13,14 +15,8 @@ from app.schemas.chat import AICoachQuestion, MessageCreate, ChatSessionResponse
 from app.models.chat import ChatSession, Message, MessageRole, MessageType
 from app.utils.helpers import get_current_time_ist, convert_mongo_document
 
-import os
-from dotenv import load_dotenv
-
 # Load environment variables from .env file
 load_dotenv()
-
-# Get settings
-
 
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -35,20 +31,21 @@ router = APIRouter(
     },
 )
 
-# Fetch the API key from environment
-openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
-
-# Check if the key is set
-if not openrouter_api_key:
-    raise RuntimeError("OPENROUTER_API_KEY is not set in the environment variables.")
-
-# OpenRouter AI client setup
-ai_client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=openrouter_api_key,
-)
-
+# Get settings instance
 settings = get_settings()
+
+# Initialize OpenRouter client
+def get_ai_client():
+    """Initialize OpenRouter AI client"""
+    openrouter_api_key = settings.OPENROUTER_API_KEY or os.getenv("OPENROUTER_API_KEY")
+    
+    if not openrouter_api_key:
+        raise RuntimeError("OPENROUTER_API_KEY is not set in environment variables or settings.")
+    
+    return OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=openrouter_api_key,
+    )
 
 # Helper function to get current user ID from token
 async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:

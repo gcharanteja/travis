@@ -31,10 +31,14 @@ class Settings(BaseSettings):
     PLAID_SECRET: str = os.getenv("PLAID_SECRET", "")
     PLAID_ENV: str = os.getenv("PLAID_ENV", "sandbox")  # sandbox, development, or production
     
-    # LLM settings
-    #OPENAI_API_KEY: str = os.getenv("OPENROUTER_API_KEY")
-    AZURE_OPENAI_API_KEY: str = os.getenv("AZURE_OPENAI_API_KEY")
-    AZURE_OPENAI_ENDPOINT: str = os.getenv("AZURE_OPENAI_ENDPOINT")
+    # AI Service Configuration - Make Azure fields optional
+    AZURE_OPENAI_API_KEY: Optional[str] = Field(default=None, description="Azure OpenAI API key")
+    AZURE_OPENAI_ENDPOINT: Optional[str] = Field(default=None, description="Azure OpenAI endpoint")
+    AZURE_OPENAI_MODEL_NAME: str = Field(default="gpt-4", description="Azure OpenAI model name")
+    AZURE_OPENAI_VERSION: str = Field(default="2024-02-15-preview", description="Azure OpenAI API version")
+    
+    # OpenRouter Configuration - Add this field
+    OPENROUTER_API_KEY: Optional[str] = Field(default=None, description="OpenRouter API key")
     
     # Indian Market Data APIs
     NSE_INDIA_API_KEY: str = os.getenv("NSE_INDIA_API_KEY", "")
