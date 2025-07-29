@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get settings
-settings = get_settings()
+
 
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -47,6 +47,8 @@ ai_client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=openrouter_api_key,
 )
+
+settings = get_settings()
 
 # Helper function to get current user ID from token
 async def get_current_user_id(token: str = Depends(oauth2_scheme)) -> str:

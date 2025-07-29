@@ -32,9 +32,9 @@ class Settings(BaseSettings):
     PLAID_ENV: str = os.getenv("PLAID_ENV", "sandbox")  # sandbox, development, or production
     
     # LLM settings
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
-    AZURE_OPENAI_API_KEY: str = os.getenv("AZURE_OPENAI_API_KEY", "")
-    AZURE_OPENAI_ENDPOINT: str = os.getenv("AZURE_OPENAI_ENDPOINT", "")
+    #OPENAI_API_KEY: str = os.getenv("OPENROUTER_API_KEY")
+    AZURE_OPENAI_API_KEY: str = os.getenv("AZURE_OPENAI_API_KEY")
+    AZURE_OPENAI_ENDPOINT: str = os.getenv("AZURE_OPENAI_ENDPOINT")
     
     # Indian Market Data APIs
     NSE_INDIA_API_KEY: str = os.getenv("NSE_INDIA_API_KEY", "")
