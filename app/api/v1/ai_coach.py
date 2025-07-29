@@ -33,6 +33,15 @@ router = APIRouter(
 
 # Get settings instance
 settings = get_settings()
+# Simple global ai_client setup (like your original)
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+if not openrouter_api_key:
+    raise RuntimeError("OPENROUTER_API_KEY is not set in the environment variables.")
+
+ai_client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=openrouter_api_key,
+)
 
 # Initialize OpenRouter client
 def get_ai_client():
