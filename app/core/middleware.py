@@ -48,6 +48,8 @@ def setup_middleware(app: FastAPI) -> None:
             "http://localhost:3000",
             "https://localhost:3000",
             "http://127.0.0.1:3000",
+            "https://algotrader.me/",
+            "https://algotrader.me",
             "https://127.0.0.1:3000",
             "https://kp9s49-8000.csb.app",
             "http://kp9s49-8000.csb.app"

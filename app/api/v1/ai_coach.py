@@ -13,7 +13,11 @@ from app.schemas.chat import AICoachQuestion, MessageCreate, ChatSessionResponse
 from app.models.chat import ChatSession, Message, MessageRole, MessageType
 from app.utils.helpers import get_current_time_ist, convert_mongo_document
 
+import os
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 # Get settings
 settings = get_settings()
@@ -31,11 +35,17 @@ router = APIRouter(
     },
 )
 
+# Fetch the API key from environment
+openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+
+# Check if the key is set
+if not openrouter_api_key:
+    raise RuntimeError("OPENROUTER_API_KEY is not set in the environment variables.")
+
 # OpenRouter AI client setup
 ai_client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="currently null it does nto work for ssl problem ",
-    #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
+    api_key=openrouter_api_key,
 )
 
 # Helper function to get current user ID from token
