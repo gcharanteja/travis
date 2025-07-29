@@ -1,5 +1,6 @@
 import os
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings 
+from pydantic import Field
 from functools import lru_cache
 from dotenv import load_dotenv
 import logging
@@ -56,6 +57,7 @@ class Settings(BaseSettings):
         case_sensitive = False  # Allow MONGODB_URI or mongodb_uri
         env_file = ".env"  # Keep for local testing, ignored by Render
         env_file_encoding = "utf-8"
+        extra = "ignore"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
